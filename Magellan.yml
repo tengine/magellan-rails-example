@@ -100,11 +100,11 @@
 #
 
 # common configurations among this project
-$PROJECT:
+$ENV:
   SECRET_KEY_BASE:
-    generator: "random_string('0-9a-z', 128)"
+    generate_once: "random_string('0-9a-z', 128)"
   RABBITMQ_PASS:
-    generator: "random_string('0-9a-z', 16)"
+    generate_once: "random_string('0-9a-z', 16)"
 
 worker1:
   image: groovenats/magellan_sample1
@@ -117,7 +117,7 @@ worker1:
   # volume:
   # - "/usr/src/app/log"
   # env:
-  #   SECRET_KEY_BASE: "$PROJECT.SECRET_KEY_BASE"
+  #   SECRET_KEY_BASE: "$ENV.SECRET_KEY_BASE"
   #   RAILS_ENV: production
 
   # argument for docker run
@@ -135,7 +135,7 @@ rabbitmq:
   # - 5672
   # - 15672
   env:
-    RABBITMQ_PASS: "$PROJECT.RABBITMQ_PASS"
+    RABBITMQ_PASS: "$ENV.RABBITMQ_PASS"
 
 redis:
   image: redis
