@@ -1,19 +1,12 @@
-# -*- coding: utf-8 -*-
-require 'spec_helper'
+require 'rails_helper'
 
-describe HelloController do
-  describe '#index' do
-    before do
-      get "/hello/index"
-    end
-    it '200 OK' do
+RSpec.describe HelloController, :type => :controller do
+
+  describe "GET 'index'" do
+    it "returns http success" do
+      get 'index'
       expect(response).to be_success
-      expect(response.status).to eq(200)
-    end
-
-    it 'get hello' do
-      json = JSON.parse(response.body)
-      expect(json['hello']).to eq('world')
     end
   end
+
 end
