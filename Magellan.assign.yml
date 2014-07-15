@@ -1,0 +1,24 @@
+production: &assign_production
+- host0:
+    rabbitmq: 1
+- host1:
+    worker1: 5
+- host2:
+    worker1: 5
+- host3:
+    worker1: 5
+- host4:
+    redis: 1
+- host5:
+    redis: 1
+- host6:
+    redis: 1
+staging: *assign_production
+
+sandbox1: &assign_sandbox
+- host1:
+    worker1: 3
+    rabbitmq: 1
+    redis: 1
+sandbox2: *assign_sandbox
+sandbox3: *assign_sandbox
