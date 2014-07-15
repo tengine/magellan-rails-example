@@ -1,0 +1,147 @@
+# # コンテナイメージのビルド
+#
+# ## magellan build worker1
+#
+# worker1のコンテナをビルドします。
+# （このサンプルにはありませんが、）コンテナのビルドに
+# 必要な処理が定義されていればそれも実行します。
+#
+#
+
+
+# # コンテナを単独で起動
+#
+# ## redis
+#
+# * magellan run redis
+#
+# redisイメージからコンテナを起動します。
+#
+#
+# ## rabbitmq
+#
+# * magellan run rabbitmq
+#
+# rabbitmqイメージからコンテナを起動します。この設定ファイルに定義されている設定が
+# 反映された状態でコンテナが起動されます。
+#
+# ## worker1の起動
+#
+# * magellan init
+# * magellan migrate
+# * magellan run
+#
+#
+
+
+# # コンテナ間の接続のための環境変数
+#
+# dockerでコンテナをlinkさせる場合、接続先を環境変数を用いて取得する必要があります。
+# この環境変数はlink、expose, env などの設定から作成されます。
+#
+# ## 確認方法
+#
+# * magellan env
+#
+# ```
+# $ magellan env
+# REDIS_PORT_6379_TCP_ADDR=172.12.0.4
+# REDIS_PORT_6379_TCP_PORT=9999
+# (snip)
+# RABBITMQ_PORT_5672_TCP_ADDR=172.12.0.4
+# RABBITMQ_PORT_5672_TCP_PORT=9999
+# RABBITMQ_ENV_RABBITMQ_PASS=abcdefghijkl
+#
+# for more exmple https://github.com/akm/rails_admin_example2/blob/master/config/database.yml#L54
+# ```
+#
+# https://github.com/tengine/magellan-conductor/blob/master/containers/test_tools/rabbitmq2redis#L23
+#
+
+
+# # ステージ
+#
+# ## ステージの管理(CRUD)
+#
+# * magellan stage new/rm/mv <ステージ名>
+#
+# ステージ名はmagellan-commandline-tools あるいは consoleのUIで登録したものです。
+# 例えば以下の様な名前が使われます。
+# * production
+# * staging
+# * sandbox1
+# * sandbox2
+#
+#
+# ## 各ステージでのVMへのコンテナの割り当て
+
+
+# # ホスト
+#
+# ## ホストの管理
+#
+# * magellan host new <VMイメージ名> -s <ステージ名>
+#
+# この時点ではVMは起動しません。
+#
+# * magellan host run
+#
+# 定義されているVMを起動します。
+#
+# * magellan host rm <VMのID> -s <ステージ名>
+#
+#
+
+# # コンテナ
+#
+# ## ステージごとのアサイン
+#
+# * magellan assign worker1 -s <ステージ名> -h <ホスト名>
+#
+
+# common configurations among this project
+$PROJECT:
+  SECRET_KEY_BASE:
+    generator: "random_string('0-9a-z', 128)"
+  RABBITMQ_PASS:
+    generator: "random_string('0-9a-z', 16)"
+
+worker1:
+  image: groovenats/magellan_sample1
+  link:
+  - rabbitmq
+  - redis
+
+  Dockerfile: "./Dockerfile"
+  # # following settings are filled from Dockerfile
+  # volume:
+  # - "/usr/src/app/log"
+  # env:
+  #   SECRET_KEY_BASE: "$PROJECT.SECRET_KEY_BASE"
+  #   RAILS_ENV: production
+
+  # argument for docker run
+  command:
+    init   : "bundle exec rake db:drop db:create db:migrate db:seed"
+    migrate: "bundle exec rake db:migrate"
+    run    : "bundle exec magellan worker"
+
+rabbitmq:
+  singleton: true
+  image: tutum/rabbitmq
+  Dockerfile: https://raw.githubusercontent.com/tutumcloud/tutum-docker-rabbitmq/master/Dockerfile
+  # # following settings are filled from Dockerfile
+  # expose:
+  # - 5672
+  # - 15672
+  env:
+    RABBITMQ_PASS: "$PROJECT.RABBITMQ_PASS"
+
+redis:
+  image: redis
+  Dockerfile: https://raw.githubusercontent.com/docker-library/redis/docker-2.8.12/Dockerfile
+  # # following settings are filled from Dockerfile
+  # volume:
+  # - "/data"
+  # expose:
+  # - 6379
