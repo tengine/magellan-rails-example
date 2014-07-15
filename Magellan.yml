@@ -7,6 +7,8 @@
 # 必要な処理が定義されていればそれも実行します。
 #
 #
+
+
 # # コンテナを単独で起動
 #
 # ## redis
@@ -30,24 +32,79 @@
 # * magellan run
 #
 #
+
+
+# # コンテナ間の接続のための環境変数
 #
-# # コンテナをまとめて起動
+# dockerでコンテナをlinkさせる場合、接続先を環境変数を用いて取得する必要があります。
+# この環境変数はlink、expose, env などの設定から作成されます。
 #
-# ## localのdocker環境
+# ## 確認方法
 #
-# * magellan setup local
+# * magellan env
 #
+# ```
+# $ magellan env
+# REDIS_PORT_6379_TCP_ADDR=172.12.0.4
+# REDIS_PORT_6379_TCP_PORT=9999
+# (snip)
+# RABBITMQ_PORT_5672_TCP_ADDR=172.12.0.4
+# RABBITMQ_PORT_5672_TCP_PORT=9999
+# RABBITMQ_ENV_RABBITMQ_PASS=abcdefghijkl
 #
-# ## 任意のdocker環境へのdocker環境
+# for more exmple https://github.com/akm/rails_admin_example2/blob/master/config/database.yml#L54
+# ```
 #
-# * magellan setup <環境名>
+# https://github.com/tengine/magellan-conductor/blob/master/containers/test_tools/rabbitmq2redis#L23
 #
-# 環境名はmagellan-commandline-tools あるいは consoleのUIで登録したものです。
+
+
+# # ステージ
+#
+# ## ステージの管理(CRUD)
+#
+# * magellan stage new/rm/mv <ステージ名>
+#
+# ステージ名はmagellan-commandline-tools あるいは consoleのUIで登録したものです。
 # 例えば以下の様な名前が使われます。
 # * production
 # * staging
 # * sandbox1
 # * sandbox2
+#
+#
+# ## 各ステージでのVMへのコンテナの割り当て
+
+
+# # ホスト
+#
+# ## ホストの管理
+#
+# * magellan host new <VMイメージ名> -s <ステージ名>
+#
+# この時点ではVMは起動しません。
+#
+# * magellan host run
+#
+# 定義されているVMを起動します。
+#
+# * magellan host rm <VMのID> -s <ステージ名>
+#
+#
+
+# # コンテナ
+#
+# ## ステージごとのアサイン
+#
+# * magellan assign worker1 -s <ステージ名> -h <ホスト名>
+#
+
+# common configurations among this project
+$PROJECT:
+  SECRET_KEY_BASE:
+    generator: "random_string('0-9a-z', 128)"
+  RABBITMQ_PASS:
+    generator: "random_string('0-9a-z', 16)"
 
 worker1:
   image: groovenats/magellan_sample1
@@ -61,7 +118,6 @@ worker1:
   # - "/usr/src/app/log"
   # env:
   #   SECRET_KEY_BASE: "$PROJECT.SECRET_KEY_BASE"
-  #   # SECRET_KEY_BASE: "$PROJECT:version.SECRET_KEY_BASE"
   #   RAILS_ENV: production
 
   # argument for docker run
