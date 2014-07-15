@@ -1,3 +1,54 @@
+# # コンテナイメージのビルド
+#
+# ## magellan build worker1
+#
+# worker1のコンテナをビルドします。
+# （このサンプルにはありませんが、）コンテナのビルドに
+# 必要な処理が定義されていればそれも実行します。
+#
+#
+# # コンテナを単独で起動
+#
+# ## redis
+#
+# * magellan run redis
+#
+# redisイメージからコンテナを起動します。
+#
+#
+# ## rabbitmq
+#
+# * magellan run rabbitmq
+#
+# rabbitmqイメージからコンテナを起動します。この設定ファイルに定義されている設定が
+# 反映された状態でコンテナが起動されます。
+#
+# ## worker1の起動
+#
+# * magellan init
+# * magellan migrate
+# * magellan run
+#
+#
+#
+# # コンテナをまとめて起動
+#
+# ## localのdocker環境
+#
+# * magellan setup local
+#
+#
+# ## 任意のdocker環境へのdocker環境
+#
+# * magellan setup <環境名>
+#
+# 環境名はmagellan-commandline-tools あるいは consoleのUIで登録したものです。
+# 例えば以下の様な名前が使われます。
+# * production
+# * staging
+# * sandbox1
+# * sandbox2
+
 worker1:
   image: groovenats/magellan_sample1
   link:
