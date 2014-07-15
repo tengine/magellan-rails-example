@@ -18,11 +18,10 @@
 # 5. 実行
 # docker run --link redis:redis --link rabbitmq:rabbitmq -v /var/log/app:/usr/src/app/log:rw -e SECRET_KEY_BASE=$SECRET_KEY_BASE -d -t groovenauts/magellan-rails-example bundle exec magellan server
 #
-# 5'. HTTPでデバッグ実行
+# 6. HTTPでデバッグ実行
 # docker run --link redis:redis --link rabbitmq:rabbitmq -v /var/log/app:/usr/src/app/log:rw -e SECRET_KEY_BASE=$SECRET_KEY_BASE -p 3000:3000 -d -t groovenauts/magellan-rails-example bundle exec rails server
 #
-# 6. 確認
-# 6-1. boot2dockerを使っている場合
+#   A. boot2dockerを使っている場合
 #     1. boot2docker ip の出力からIPを確認
 #     2. boot2docker info で"Docker Port"を確認
 #     3. ブラウザで hhtp://#{1のIP}:#{2のポート} を開く
