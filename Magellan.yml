@@ -1,0 +1,40 @@
+worker1:
+  image: groovenats/magellan_sample1
+  link:
+  - rabbitmq
+  - redis
+
+  Dockerfile: "./Dockerfile"
+  # # following settings are filled from Dockerfile
+  # volume:
+  # - "/usr/src/app/log"
+  # env:
+  #   SECRET_KEY_BASE: "$PROJECT.SECRET_KEY_BASE"
+  #   # SECRET_KEY_BASE: "$PROJECT:version.SECRET_KEY_BASE"
+  #   RAILS_ENV: production
+
+  # argument for docker run
+  command:
+    init   : "bundle exec rake db:drop db:create db:migrate db:seed"
+    migrate: "bundle exec rake db:migrate"
+    run    : "bundle exec magellan worker"
+
+rabbitmq:
+  singleton: true
+  image: tutum/rabbitmq
+  Dockerfile: https://raw.githubusercontent.com/tutumcloud/tutum-docker-rabbitmq/master/Dockerfile
+  # # following settings are filled from Dockerfile
+  # expose:
+  # - 5672
+  # - 15672
+  env:
+    RABBITMQ_PASS: "$PROJECT.RABBITMQ_PASS"
+
+redis:
+  image: redis
+  Dockerfile: https://raw.githubusercontent.com/docker-library/redis/docker-2.8.12/Dockerfile
+  # # following settings are filled from Dockerfile
+  # volume:
+  # - "/data"
+  # expose:
+  # - 6379
