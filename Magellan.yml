@@ -119,6 +119,10 @@ worker1:
   # env:
   #   SECRET_KEY_BASE: "$PROJECT.SECRET_KEY_BASE"
   #   RAILS_ENV: production
+  #   # magellan-railsがタイトル名: vhost, キュー, エクスチェンジの接続時, RabbitMQのユーザ名としてRabbitMQ接続時に使用
+  #   TITLE_NAME: customer1.sample_project
+  #   # magellan-railsがタイトルランタイムバージョン: キュー, エクスチェンジの接続時, ルーティングキーに使用
+  #   TITLE_RUNTIME_VER: 1.0.0
 
   # argument for docker run
   command:
