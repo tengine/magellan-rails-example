@@ -100,7 +100,7 @@ r.del 'customer1.magellan-rails-example.reply_queues'
 # ワーカーの処理結果を返すキューの設定をセット
 reply_queue_config = {queue:  "#{title_name}.reply.001", routing_key:"001"}.to_json
 
-r.lpush("#{title_name}.reply_queues" , reply_queue_config)
+r.lpush("#{title_name}/reply_queues" , reply_queue_config)
 r.quit
 
 puts "complete success!"
