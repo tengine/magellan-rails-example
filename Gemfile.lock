@@ -1,3 +1,12 @@
+GIT
+  remote: git@github.com:tengine/magellan-rails.git
+  revision: 7a256776c934996706ed14a6ac8c48a6f632367d
+  branch: features/start_magellan-rails
+  specs:
+    magellan-rails (0.0.1)
+      bunny
+      json
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -27,8 +36,11 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
+    amq-protocol (1.9.2)
     arel (5.0.1.20140414130214)
     builder (3.2.2)
+    bunny (1.3.1)
+      amq-protocol (>= 1.9.2)
     coffee-rails (4.0.1)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0, < 5.0)
@@ -133,6 +145,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.0)
   jbuilder (~> 2.0)
   jquery-rails
+  magellan-rails!
   rails (= 4.1.4)
   rspec-rails (~> 3.0.0)
   sass-rails (~> 4.0.3)
