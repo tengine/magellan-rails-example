@@ -1,0 +1,4 @@
+[submodule "gems/magellan-rails"]
+	path = gems/magellan-rails
+	url = git@github.com:tengine/magellan-rails.git
+	branch = features/start_magellan-rails
