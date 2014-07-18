@@ -40,7 +40,7 @@ admin_user          = ENV['RABBITMQ_ENV_RABBITMQ_USER']   # || 'guest'
 admin_pass          = ENV['RABBITMQ_ENV_RABBITMQ_PASS']   # || 'guest'
 
 # RabbitMQに接続
-endpoint = "http://127.0.0.1:15672"
+endpoint = "http://#{rabbitmq_host}:#{rabbitmq_port}"
 client = RabbitMQ::HTTP::Client.new(endpoint, :username => admin_user, :password => admin_pass)
 
 # タイトルに1:1で対応させるユーザの作成
