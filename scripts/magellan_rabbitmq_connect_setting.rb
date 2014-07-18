@@ -54,20 +54,20 @@ client.create_vhost("/#{title_name}")
 
 # 管理ユーザが上記で作成したバーチャルホストにエクスチェンジやキューを作成できるようにするために
 # 管理ユーザに上記で作成したバーチャルホストに関するフルアクセス権限を付与
-admin_ps = client.user_permissions(admin_user)
+client.user_permissions(admin_user)
 # Update permissions of a user in a vhost
-admin_ps = client.update_permissions_of("/#{title_name}", admin_user, :write => ".*", :read => ".*", :configure => ".*")
+client.update_permissions_of("/#{title_name}", admin_user, :write => ".*", :read => ".*", :configure => ".*")
 
 # magellan-transaction-routerが使用するユーザに、 magellan-transaction-routerが動作するのに必要最低限の権限を付与
 # 暫定的に全権限を付与
-tr_ps = client.user_permissions(tr_name)
+client.user_permissions(tr_name)
 # Update permissions of a user in a vhost
-tr_ps = client.update_permissions_of("/#{title_name}", tr_name, :write => ".*", :read => ".*", :configure => ".*")
+client.update_permissions_of("/#{title_name}", tr_name, :write => ".*", :read => ".*", :configure => ".*")
 
 # ワーカー使用するユーザに、ワーカーが動作するのに必要最低限の権限を付与
-title_ps = client.user_permissions(title_name)
+client.user_permissions(title_name)
 # Update permissions of a user in a vhost
-title_ps = client.update_permissions_of("/#{title_name}", title_name, :write => ".*", :read => ".*", :configure => "")
+client.update_permissions_of("/#{title_name}", title_name, :write => ".*", :read => ".*", :configure => "")
 
 # ワーカー処理要求用, ワーカ処理結果返却用エクスチェンジの作成
 #                        vhost,            name,                 attributes = {}
