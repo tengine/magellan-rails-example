@@ -3,8 +3,6 @@ require 'rabbitmq/http/client'
 require 'redis'
 require 'json'
 
-REDIS_HOST = "127.0.0.1"
-REDIS_PORT = 6379
 
 if ARGV.size < 4
   puts 'please set 4 arguments'
@@ -34,9 +32,16 @@ title_password    = ARGV[5]  # 例: 'pswd2'
 request_queue_name  = "#{title_name}.#{title_runtime_ver}.#{worker_name}"
 routing_key         = "#{title_runtime_ver}.rails"
 
+redis_host          = ENV['REDIS_PORT_6379_TCP_ADDR']     # || "127.0.0.1"
+redis_port          = ENV['REDIS_PORT_6379_TCP_PORT']     # || 6379
+rabbitmq_host       = ENV['RABBITMQ_PORT_15672_TCP_ADDR'] # || '127.0.0.1'
+rabbitmq_port       = ENV['RABBITMQ_PORT_15672_TCP_PORT'] # || '15672'
+admin_user          = ENV['RABBITMQ_ENV_RABBITMQ_USER']   # || 'guest'
+admin_pass          = ENV['RABBITMQ_ENV_RABBITMQ_PASS']   # || 'guest'
+
 # RabbitMQに接続
 endpoint = "http://127.0.0.1:15672"
-client = RabbitMQ::HTTP::Client.new(endpoint, :username => "guest", :password => "guest")
+client = RabbitMQ::HTTP::Client.new(endpoint, :username => admin_user, :password => admin_pass)
 
 # タイトルに1:1で対応させるユーザの作成
 client.update_user(title_name, tags: '', password: title_password)
@@ -47,11 +52,11 @@ client.update_user(tr_name, tags: '', password: tr_password)
 # タイトルに1:1で対応させるバーチャルホストの作成
 client.create_vhost("/#{title_name}")
 
-# guestユーザが上記で作成したバーチャルホストにエクスチェンジやキューを作成できるようにするために
-# guestユーザに上記で作成したバーチャルホストに関するフルアクセス権限を付与
-guest_ps = client.user_permissions("guest")
+# 管理ユーザが上記で作成したバーチャルホストにエクスチェンジやキューを作成できるようにするために
+# 管理ユーザに上記で作成したバーチャルホストに関するフルアクセス権限を付与
+admin_ps = client.user_permissions(admin_user)
 # Update permissions of a user in a vhost
-guest_ps = client.update_permissions_of("/#{title_name}", "guest", :write => ".*", :read => ".*", :configure => ".*")
+admin_ps = client.update_permissions_of("/#{title_name}", admin_user, :write => ".*", :read => ".*", :configure => ".*")
 
 # magellan-transaction-routerが使用するユーザに、 magellan-transaction-routerが動作するのに必要最低限の権限を付与
 # 暫定的に全権限を付与
@@ -86,7 +91,7 @@ client.declare_queue("/#{title_name}", "#{title_name}.reply.001", :durable => fa
 # ワーカー処理要求用エクスチェンジとキューをバインド
 client.bind_queue("/#{title_name}", "#{title_name}.reply.001", "#{title_name}.reply", '001')
 
-r = Redis.new
+r = Redis.new(host: redis_host, port: redis_port)
 
 # このスクリプトを実行する度にRedisに同一の 'ワーカーの処理結果を返すキュー' の設定が追加されてしまうため
 # Redisから該当キーを削除してから設定処理を行います
@@ -97,3 +102,5 @@ reply_queue_config = {queue:  "#{title_name}.reply.001", routing_key:"001"}.to_j
 
 r.lpush("#{title_name}.reply_queues" , reply_queue_config)
 r.quit
+
+puts "complete success!"
