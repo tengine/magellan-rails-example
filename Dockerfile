@@ -37,3 +37,5 @@ ENV RAILS_ENV production
 
 VOLUME /usr/src/app/log
 WORKDIR /usr/src/app
+
+RUN gem install rabbitmq_http_api_client redis json
