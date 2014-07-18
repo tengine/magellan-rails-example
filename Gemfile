@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 source 'https://rubygems.org'
 
 
@@ -41,3 +42,14 @@ gem 'spring',        group: :development
 group :development, :test do
   gem 'rspec-rails', '~> 3.0.0'
 end
+
+# rabbitmq_http_api_client(>= 0) が依存する multi_json (~> 1.4.0)  が、
+# sass-rails(~> 4.0.3)が依存するmulti_json (1.10.1)とコンフリクトするので、
+# これを使用する scripts/magellan_rabbitmq_connect_setting.rb でのみ使えるように
+# Dokerfileに記述します
+# group :development do
+#   gem "rabbitmq_http_api_client"
+#   gem "redis"
+#   gem "json"
+# end
+
