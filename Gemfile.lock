@@ -1,7 +1,5 @@
-GIT
-  remote: git@github.com:tengine/magellan-rails.git
-  revision: 7a256776c934996706ed14a6ac8c48a6f632367d
-  branch: features/start_magellan-rails
+PATH
+  remote: gems/magellan-rails
   specs:
     magellan-rails (0.0.1)
       bunny
