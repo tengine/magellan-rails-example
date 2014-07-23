@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 source 'https://rubygems.org'
 
 
@@ -12,7 +13,8 @@ gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .js.coffee assets and views
 gem 'coffee-rails', '~> 4.0.0'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-# gem 'therubyracer',  platforms: :ruby
+# Linux環境では、JSの実行環境がないため、therubyracerをインストールするようにします
+gem 'therubyracer', '~> 0.12.1', :platform => :ruby
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
@@ -37,4 +39,31 @@ gem 'spring',        group: :development
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
+
+# インストールする方法で採用したい順位は以下のとおりですが、公開前は1はNGで、
+# dockerを使うとコンテナのイメージをビルドする際のユーザがSSHログインのユーザとは
+# 異なるので2もNGとなってしまいます。ですので仕方なく3の方法を選びます。
+#
+# 1. rubygemsから普通のgemとしてインストール
+# gem "magellan-rails"
+#
+# 2. :git, :branchオプションを使用してインストール
+# gem "magellan-rails", :git => 'git@github.com:tengine/magellan-rails.git', :branch => "features/start_magellan-rails"
+#
+# 3. submoduleで取得した上で :pathオプションを使用してインストール
+gem "magellan-rails", :path => "gems/magellan-rails"
+
+group :development, :test do
+  gem 'rspec-rails', '~> 3.0.0'
+end
+
+# rabbitmq_http_api_client(>= 0) が依存する multi_json (~> 1.4.0)  が、
+# sass-rails(~> 4.0.3)が依存するmulti_json (1.10.1)とコンフリクトするので、
+# これを使用する scripts/magellan_rabbitmq_connect_setting.rb でのみ使えるように
+# Dokerfileに記述します
+# group :development do
+#   gem "rabbitmq_http_api_client"
+#   gem "redis"
+#   gem "json"
+# end
 
