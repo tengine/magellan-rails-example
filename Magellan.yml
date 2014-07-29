@@ -5,41 +5,26 @@ $STAGE:
   RABBITMQ_PASS:
     generator: "random_string('0-9a-z', 16)"
 
-app:
-  image: groovenauts/magellan-rails-example
-  # Dockerfile: "./Dockerfile"
-  ports:
-    - 3000:3000
-  links:
-    - rabbitmq:rabbitmq
-  env:
-    - VHOST=/customer1.magellan-rails-example
-    - REQEST_QUEUE=customer1.magellan-rails-example.0.0.1.rails
-    - RESPONSE_EXCHANGE=customer1.magellan-rails-example.reply
-    - RABBITMQ_USER=customer1.magellan-rails-example
-    - RABBITMQ_PASS=pswd2
-    - SECRET_KEY_BASE="$STAGE.SECRET_KEY_BASE"
-  volumes:
-    - /var/log/application:/usr/src/app/log
-  command: bundle exec magellan-rails
 
-  before_tasks:
-    - name: "make application log directory"
-      file:
-        path: /var/log/application
-        force: yes
-        state: directory
+trdb:
+  singleton: true
+  image: redis
+  # Dockerfile: https://raw.githubusercontent.com/docker-library/redis/docker-2.8.12/Dockerfile
+  volume:
+  - "/data"
+  expose:
+  - 6379
+  after_tasks:
+    - name: "setup TD data"
+      docker:
+        detach: False
+        name: magellan-tr-data
+        image: groovenauts/magellan-tr-data
+        links:
+          - trdb:redis
+
 
 rabbitmq:
-  singleton: true
-  image: tutum/rabbitmq
-  # Dockerfile: https://raw.githubusercontent.com/tutumcloud/tutum-docker-rabbitmq/master/Dockerfile
-  expose:
-  - 5672
-  - 15672
-  env:
-    RABBITMQ_PASS: "$STAGE.RABBITMQ_PASS"
-
   before_tasks:
     - name: "stop RabbitMQ container"
       command: docker stop rabbitmq
@@ -60,6 +45,15 @@ rabbitmq:
           - /var/log/rabbitmq:/var/log/rabbitmq
         command: "chown -R rabbitmq:rabbitmq /var/log/rabbitmq"
 
+  singleton: true
+  image: tutum/rabbitmq
+  # Dockerfile: https://raw.githubusercontent.com/tutumcloud/tutum-docker-rabbitmq/master/Dockerfile
+  expose:
+  - 5672
+  - 15672
+  env:
+    RABBITMQ_PASS: "$STAGE.RABBITMQ_PASS"
+
   after_tasks:
     - name: "wait to ready rabbitmq"
       wait_for: delay=3 port=5672
@@ -75,22 +69,6 @@ rabbitmq:
           - rabbitmq:rabbitmq
         command: ruby ./rabbitmq customer1.magellan-rails-example 0.0.1 rails transaction-router pswd1 pswd2
 
-trdb:
-  singleton: true
-  image: redis
-  # Dockerfile: https://raw.githubusercontent.com/docker-library/redis/docker-2.8.12/Dockerfile
-  volume:
-  - "/data"
-  expose:
-  - 6379
-  after_tasks:
-    - name: "setup TD data"
-      docker:
-        detach: False
-        name: magellan-tr-data
-        image: groovenauts/magellan-tr-data
-        links:
-          - trdb:redis
 
 tr:
   singleton: true
@@ -104,3 +82,31 @@ tr:
   tty: True
   stdin_open: True
   command: /bin/bash ./boot.sh
+
+
+
+
+app:
+  before_tasks:
+    - name: "make application log directory"
+      file:
+        path: /var/log/application
+        force: yes
+        state: directory
+
+  image: groovenauts/magellan-rails-example
+  # Dockerfile: "./Dockerfile"
+  ports:
+    - 3000:3000
+  links:
+    - rabbitmq:rabbitmq
+  env:
+    - VHOST=/customer1.magellan-rails-example
+    - REQEST_QUEUE=customer1.magellan-rails-example.0.0.1.rails
+    - RESPONSE_EXCHANGE=customer1.magellan-rails-example.reply
+    - RABBITMQ_USER=customer1.magellan-rails-example
+    - RABBITMQ_PASS=pswd2
+    - SECRET_KEY_BASE="$STAGE.SECRET_KEY_BASE"
+  volumes:
+    - /var/log/application:/usr/src/app/log
+  command: bundle exec magellan-rails
