@@ -1,11 +1,3 @@
-# common configurations among this project
-$STAGE:
-  SECRET_KEY_BASE:
-    generator: "random_string('0-9a-z', 128)"
-  RABBITMQ_PASS:
-    generator: "random_string('0-9a-z', 16)"
-
-
 trdb:
   singleton: true
   image: redis
