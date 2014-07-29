@@ -10,10 +10,6 @@ trdb:
   singleton: true
   image: redis
   # Dockerfile: https://raw.githubusercontent.com/docker-library/redis/docker-2.8.12/Dockerfile
-  volume:
-  - "/data"
-  expose:
-  - 6379
   after_tasks:
     - name: "setup TD data"
       docker:
