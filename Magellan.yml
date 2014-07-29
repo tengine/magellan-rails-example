@@ -48,11 +48,14 @@ rabbitmq:
   singleton: true
   image: tutum/rabbitmq
   # Dockerfile: https://raw.githubusercontent.com/tutumcloud/tutum-docker-rabbitmq/master/Dockerfile
-  expose:
-  - 5672
-  - 15672
+  ports:
+    - 5672:5672
+    - 15672:15672
   env:
-    RABBITMQ_PASS: "$STAGE.RABBITMQ_PASS"
+    - RABBITMQ_USER=magellan
+    - RABBITMQ_PASS=mypass
+  volumes:
+    - /var/log/rabbitmq:/var/log/rabbitmq
 
   after_tasks:
     - name: "wait to ready rabbitmq"
