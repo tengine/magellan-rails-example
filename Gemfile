@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.1.4'
+gem 'rails', '~> 4.1.0'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 # Use SCSS for stylesheets
@@ -51,7 +51,7 @@ gem 'spring',        group: :development
 # gem "magellan-rails", :git => 'git@github.com:tengine/magellan-rails.git', :branch => "features/start_magellan-rails"
 #
 # 3. submoduleで取得した上で :pathオプションを使用してインストール
-gem "magellan-rails", :path => "gems/magellan-rails"
+gem "magellan-rails" , :path => "gems/magellan-rails"
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.0.0'
