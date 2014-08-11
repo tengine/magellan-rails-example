@@ -1,5 +1,5 @@
 PATH
-  remote: /Users/noguchiyuuki/work/magellan/magellan-rails
+  remote: gems/magellan-rails
   specs:
     magellan-rails (0.0.1)
       bunny
