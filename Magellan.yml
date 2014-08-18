@@ -1,147 +1,115 @@
-# # コンテナイメージのビルド
-#
-# ## magellan build worker1
-#
-# worker1のコンテナをビルドします。
-# （このサンプルにはありませんが、）コンテナのビルドに
-# 必要な処理が定義されていればそれも実行します。
-#
-#
+trdb:
+  image: redis:2.8.13
+  # Dockerfile: https://raw.githubusercontent.com/docker-library/redis/docker-2.8.12/Dockerfile
+  after_tasks:
+    - name: "setup TD data"
+      docker:
+        detach: False
+        name: magellan-tr-data
+        image: groovenauts/magellan-tr-data
+        links:
+          - trdb:redis
 
-
-# # コンテナを単独で起動
-#
-# ## redis
-#
-# * magellan run redis
-#
-# redisイメージからコンテナを起動します。
-#
-#
-# ## rabbitmq
-#
-# * magellan run rabbitmq
-#
-# rabbitmqイメージからコンテナを起動します。この設定ファイルに定義されている設定が
-# 反映された状態でコンテナが起動されます。
-#
-# ## worker1の起動
-#
-# * magellan init
-# * magellan migrate
-# * magellan run
-#
-#
-
-
-# # コンテナ間の接続のための環境変数
-#
-# dockerでコンテナをlinkさせる場合、接続先を環境変数を用いて取得する必要があります。
-# この環境変数はlink、expose, env などの設定から作成されます。
-#
-# ## 確認方法
-#
-# * magellan env
-#
-# ```
-# $ magellan env
-# REDIS_PORT_6379_TCP_ADDR=172.12.0.4
-# REDIS_PORT_6379_TCP_PORT=9999
-# (snip)
-# RABBITMQ_PORT_5672_TCP_ADDR=172.12.0.4
-# RABBITMQ_PORT_5672_TCP_PORT=9999
-# RABBITMQ_ENV_RABBITMQ_PASS=abcdefghijkl
-#
-# for more exmple https://github.com/akm/rails_admin_example2/blob/master/config/database.yml#L54
-# ```
-#
-# https://github.com/tengine/magellan-conductor/blob/master/containers/test_tools/rabbitmq2redis#L23
-#
-
-
-# # ステージ
-#
-# ## ステージの管理(CRUD)
-#
-# * magellan stage new/rm/mv <ステージ名>
-#
-# ステージ名はmagellan-commandline-tools あるいは consoleのUIで登録したものです。
-# 例えば以下の様な名前が使われます。
-# * production
-# * staging
-# * sandbox1
-# * sandbox2
-#
-#
-# ## 各ステージでのVMへのコンテナの割り当て
-
-
-# # ホスト
-#
-# ## ホストの管理
-#
-# * magellan host new <VMイメージ名> -s <ステージ名>
-#
-# この時点ではVMは起動しません。
-#
-# * magellan host run
-#
-# 定義されているVMを起動します。
-#
-# * magellan host rm <VMのID> -s <ステージ名>
-#
-#
-
-# # コンテナ
-#
-# ## ステージごとのアサイン
-#
-# * magellan assign worker1 -s <ステージ名> -h <ホスト名>
-#
-
-# common configurations among this project
-$PROJECT:
-  SECRET_KEY_BASE:
-    generator: "random_string('0-9a-z', 128)"
-  RABBITMQ_PASS:
-    generator: "random_string('0-9a-z', 16)"
-
-worker1:
-  image: groovenats/magellan_sample1
-  link:
-  - rabbitmq
-  - redis
-
-  Dockerfile: "./Dockerfile"
-  # # following settings are filled from Dockerfile
-  # volume:
-  # - "/usr/src/app/log"
-  # env:
-  #   SECRET_KEY_BASE: "$PROJECT.SECRET_KEY_BASE"
-  #   RAILS_ENV: production
-
-  # argument for docker run
-  command:
-    init   : "bundle exec rake db:drop db:create db:migrate db:seed"
-    migrate: "bundle exec rake db:migrate"
-    run    : "bundle exec magellan worker"
 
 rabbitmq:
-  singleton: true
-  image: tutum/rabbitmq
-  Dockerfile: https://raw.githubusercontent.com/tutumcloud/tutum-docker-rabbitmq/master/Dockerfile
-  # # following settings are filled from Dockerfile
-  # expose:
-  # - 5672
-  # - 15672
-  env:
-    RABBITMQ_PASS: "$PROJECT.RABBITMQ_PASS"
+  before_tasks:
+    - name: "stop RabbitMQ container"
+      command: docker stop rabbitmq
+      ignore_errors: yes
+    - name: "remove RabbitMQ container"
+      command: docker rm rabbitmq
+      ignore_errors: yes
 
-redis:
-  image: redis
-  Dockerfile: https://raw.githubusercontent.com/docker-library/redis/docker-2.8.12/Dockerfile
-  # # following settings are filled from Dockerfile
-  # volume:
-  # - "/data"
-  # expose:
-  # - 6379
+    - name: "make RabbitMQ log directory"
+      file:
+        path: /var/log/rabbitmq
+        force: yes
+        state: directory
+
+    - name: "change owner /var/log/rabbitmq to rabbitmq"
+      docker:
+        name: rabbitmq_dir_owner
+        image: tutum/rabbitmq
+        volumes:
+          - /var/log/rabbitmq:/var/log/rabbitmq
+        command: "chown -R rabbitmq:rabbitmq /var/log/rabbitmq"
+
+  image: tutum/rabbitmq
+  # Dockerfile: https://raw.githubusercontent.com/tutumcloud/tutum-docker-rabbitmq/master/Dockerfile
+  ports:
+    - 5672:5672
+    - 15672:15672
+  env:
+    - RABBITMQ_USER=magellan
+    - RABBITMQ_PASS=mypass
+  volumes:
+    - /var/log/rabbitmq:/var/log/rabbitmq
+
+  after_tasks:
+    - name: "wait to ready rabbitmq"
+      wait_for: delay=3 port=5672
+    - name: "wait to ready rabbitmq admin"
+      wait_for: port=15672
+    - name: "setup Queues and Exchanges"
+      docker:
+        detach: False
+        name: magellan-setup_tools
+        image: groovenauts/magellan-setup_tools:0.1.1
+        links:
+          - trdb:redis
+          - rabbitmq:rabbitmq
+        command: ruby ./rabbitmq customer1.magellan-rails-example 0.0.1 rails transaction-router pswd1 pswd2
+
+
+tr:
+  before_tasks:
+    - name: "stop tr container"
+      command: docker stop tr
+      ignore_errors: yes
+    - name: "remove tr container"
+      command: docker rm tr
+      ignore_errors: yes
+
+  image: groovenauts/magellan-transaction-router:0.0.1-with_signature
+  # Dockerfile: https://raw.githubusercontent.com/tengine/magellan-transaction-router-broadleaf/feature/integration01/Dockerfile?token=18912__eyJzY29wZSI6IlJhd0Jsb2I6dGVuZ2luZS9tYWdlbGxhbi10cmFuc2FjdGlvbi1yb3V0ZXItYnJvYWRsZWFmL2ZlYXR1cmUvaW50ZWdyYXRpb24wMS9Eb2NrZXJmaWxlIiwiZXhwaXJlcyI6MTQwNzIzMDg4MX0%3D--2ca5fb4de69eca8cbc5cda747b8716ed85ce89a2
+  ports:
+    - 3000:3000
+  links:
+    - trdb:redis
+    - rabbitmq:rabbitmq
+  tty: True
+  stdin_open: True
+  command: /bin/bash ./boot.sh
+
+
+
+
+app:
+  before_tasks:
+    - name: "stop app container"
+      command: docker stop app
+      ignore_errors: yes
+    - name: "remove app container"
+      command: docker rm app
+      ignore_errors: yes
+
+    - name: "make application log directory"
+      file:
+        path: /var/log/application
+        force: yes
+        state: directory
+
+  image: groovenauts/magellan-rails-example
+  # Dockerfile: "./Dockerfile"
+  links:
+    - rabbitmq:rabbitmq
+  env:
+    - VHOST=/customer1.magellan-rails-example
+    - REQEST_QUEUE=customer1.magellan-rails-example.0.0.1.rails
+    - RESPONSE_EXCHANGE=customer1.magellan-rails-example.reply
+    - RABBITMQ_USER=customer1.magellan-rails-example
+    - RABBITMQ_PASS=pswd2
+    - SECRET_KEY_BASE={{ app_secret_key_base }}
+  volumes:
+    - /var/log/application:/usr/src/app/log
+  command: bundle exec magellan-rails

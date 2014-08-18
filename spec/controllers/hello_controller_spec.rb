@@ -15,6 +15,11 @@ RSpec.describe HelloController, :type => :controller do
       expect(json['hello']).to eq('world')
     end
 
+    it 'get echo' do
+      get 'echo', st: 'back'
+      json = JSON.parse(response.body)
+      expect(json['echo']).to eq('back')
+    end
   end
 
 end
