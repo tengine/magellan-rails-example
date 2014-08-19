@@ -1,4 +1,5 @@
 # [config] IMAGE_NAME: "groovenauts/magellan-rails-example"
+# [config] SETUP     : "rm -rf public/assets && bundle exec rake assets:clean assets:precompile"
 #
 # 0. イメージ作り直し
 # docker rm $(docker ps -a -q)
