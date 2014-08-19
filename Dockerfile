@@ -1,3 +1,4 @@
+# [config] IMAGE_NAME: "groovenauts/magellan-rails-example"
 #
 # 0. イメージ作り直し
 # docker rm $(docker ps -a -q)
