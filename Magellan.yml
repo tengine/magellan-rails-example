@@ -1,89 +1,3 @@
-trdb:
-  image: redis:2.8.13
-  # Dockerfile: https://raw.githubusercontent.com/docker-library/redis/docker-2.8.12/Dockerfile
-  after_tasks:
-    - name: "setup TD data"
-      docker:
-        detach: False
-        name: magellan-tr-data
-        image: groovenauts/magellan-tr-data
-        links:
-          - trdb:redis
-
-
-rabbitmq:
-  before_tasks:
-    - name: "stop RabbitMQ container"
-      command: docker stop rabbitmq
-      ignore_errors: yes
-    - name: "remove RabbitMQ container"
-      command: docker rm rabbitmq
-      ignore_errors: yes
-
-    - name: "make RabbitMQ log directory"
-      file:
-        path: /var/log/rabbitmq
-        force: yes
-        state: directory
-
-    - name: "change owner /var/log/rabbitmq to rabbitmq"
-      docker:
-        name: rabbitmq_dir_owner
-        image: tutum/rabbitmq
-        volumes:
-          - /var/log/rabbitmq:/var/log/rabbitmq
-        command: "chown -R rabbitmq:rabbitmq /var/log/rabbitmq"
-
-  image: tutum/rabbitmq
-  # Dockerfile: https://raw.githubusercontent.com/tutumcloud/tutum-docker-rabbitmq/master/Dockerfile
-  ports:
-    - 5672:5672
-    - 15672:15672
-  env:
-    - RABBITMQ_USER=magellan
-    - RABBITMQ_PASS=mypass
-  volumes:
-    - /var/log/rabbitmq:/var/log/rabbitmq
-
-  after_tasks:
-    - name: "wait to ready rabbitmq"
-      wait_for: delay=3 port=5672
-    - name: "wait to ready rabbitmq admin"
-      wait_for: port=15672
-    - name: "setup Queues and Exchanges"
-      docker:
-        detach: False
-        name: magellan-setup_tools
-        image: groovenauts/magellan-setup_tools:0.1.1
-        links:
-          - trdb:redis
-          - rabbitmq:rabbitmq
-        command: ruby ./rabbitmq customer1.magellan-rails-example 0.0.1 rails transaction-router pswd1 pswd2
-
-
-tr:
-  before_tasks:
-    - name: "stop tr container"
-      command: docker stop tr
-      ignore_errors: yes
-    - name: "remove tr container"
-      command: docker rm tr
-      ignore_errors: yes
-
-  image: groovenauts/magellan-transaction-router:0.0.1-with_signature
-  # Dockerfile: https://raw.githubusercontent.com/tengine/magellan-transaction-router-broadleaf/feature/integration01/Dockerfile?token=18912__eyJzY29wZSI6IlJhd0Jsb2I6dGVuZ2luZS9tYWdlbGxhbi10cmFuc2FjdGlvbi1yb3V0ZXItYnJvYWRsZWFmL2ZlYXR1cmUvaW50ZWdyYXRpb24wMS9Eb2NrZXJmaWxlIiwiZXhwaXJlcyI6MTQwNzIzMDg4MX0%3D--2ca5fb4de69eca8cbc5cda747b8716ed85ce89a2
-  ports:
-    - 3000:3000
-  links:
-    - trdb:redis
-    - rabbitmq:rabbitmq
-  tty: True
-  stdin_open: True
-  command: /bin/bash ./boot.sh
-
-
-
-
 app:
   before_tasks:
     - name: "stop app container"
@@ -104,11 +18,11 @@ app:
   links:
     - rabbitmq:rabbitmq
   env:
-    - VHOST=/customer1.magellan-rails-example
-    - REQEST_QUEUE=customer1.magellan-rails-example.0.0.1.rails
-    - RESPONSE_EXCHANGE=customer1.magellan-rails-example.reply
-    - RABBITMQ_USER=customer1.magellan-rails-example
-    - RABBITMQ_PASS=pswd2
+    - VHOST=/groovenauts.app1
+    - REQUEST_QUEUE=groovenauts.app1.0.0.1.rails
+    - RESPONSE_EXCHANGE=groovenauts.app1.reply
+    - RABBITMQ_USER=groovenauts.app1
+    - RABBITMQ_PASS=workerpw
     - SECRET_KEY_BASE={{ app_secret_key_base }}
   volumes:
     - /var/log/application:/usr/src/app/log
