@@ -1,11 +1,3 @@
-GIT
-  remote: git@github.com:tengine/brocket.git
-  revision: 76b6cde9c98dd53d216c24e73f835e1a80b3e017
-  branch: v0.0.1
-  specs:
-    brocket (0.0.1)
-      thor
-
 PATH
   remote: gems/magellan-rails
   specs:
@@ -45,6 +37,8 @@ GEM
       tzinfo (~> 1.1)
     amq-protocol (1.9.2)
     arel (5.0.1.20140414130214)
+    brocket (0.0.1)
+      thor
     builder (3.2.2)
     bunny (1.4.0)
       amq-protocol (>= 1.9.2)
@@ -154,7 +148,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  brocket!
+  brocket
   coffee-rails (~> 4.0.0)
   jbuilder (~> 2.0)
   jquery-rails
