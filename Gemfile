@@ -55,6 +55,7 @@ gem "magellan-rails" , :path => "gems/magellan-rails"
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.0.0'
+  gem "brocket"
 end
 
 # rabbitmq_http_api_client(>= 0) が依存する multi_json (~> 1.4.0)  が、
