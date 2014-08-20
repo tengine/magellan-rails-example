@@ -7,8 +7,13 @@
 # docker rm $(docker ps -a -q)
 # docker rmi $(docker images -a | awk '/^<none>/{print $3}')
 #
+# 1. イメージバージョンを更新
+# brocket version bump
+# or
+# brocket version minor
+#
 # 1. イメージ作成時
-# rm -rf public/assets && bundle exec rake assets:clean assets:precompile && docker build -t="groovenauts/magellan-rails-example" .
+# brocket release
 #
 # 2. redisサーバ起動
 # docker run --name redis -d redis
