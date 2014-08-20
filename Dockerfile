@@ -8,12 +8,12 @@
 # docker rmi $(docker images -a | awk '/^<none>/{print $3}')
 #
 # 1. イメージバージョンを更新
-# brocket version bump
+# bundle exec brocket version bump
 # or
-# brocket version minor
+# bundle exec brocket version minor
 #
 # 1. イメージ作成時
-# brocket release
+# bundle exec brocket release
 #
 # 2. redisサーバ起動
 # docker run --name redis -d redis
