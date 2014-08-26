@@ -37,7 +37,7 @@ GEM
       tzinfo (~> 1.1)
     amq-protocol (1.9.2)
     arel (5.0.1.20140414130214)
-    brocket (0.0.1)
+    brocket (0.0.3)
       thor
     builder (3.2.2)
     bunny (1.4.0)
