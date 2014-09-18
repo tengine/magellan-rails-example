@@ -68,3 +68,6 @@ end
 #   gem "json"
 # end
 
+# Use newrelic_rpm as the New Relic agent
+gem 'newrelic_rpm'
+
