@@ -2,8 +2,10 @@ Rails.application.routes.draw do
   resources :reqs
   resources :books
 
-  get 'hello/index'
+  post 'binary',      to: 'binary#post'
+  post 'binary/info', to: 'binary#info'
 
+  get 'hello/index'
   get 'hello/echo'
 
   # The priority is based upon order of creation: first created -> highest priority.
