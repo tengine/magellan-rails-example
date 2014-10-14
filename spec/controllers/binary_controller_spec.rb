@@ -26,7 +26,6 @@ RSpec.describe BinaryController, :type => :request do
       expect(response).to have_http_status(200)
 
       body = JSON.parse(response.body)
-      puts body
       expect(body["size"]).to eq(1)
       expect(body["type"]).to eq("application/octet-stream")
       expect(body["body"]).to eq(Base64.encode64(req_body))
