@@ -3,15 +3,15 @@ class HelloSubscriber < Magellan::Subscriber::Base
   after_filter :filter2
 
   def index
-    Magellan.logger.info("Hello World: topic=#{topic.inspect} body=#{body.inspect}")
-    Magellan.logger.info("Book.count = #{Book.count}")
+    logger.info("Hello World: topic=#{topic.inspect} body=#{body.inspect}")
+    logger.info("Book.count = #{Book.count}")
   end
 
   def filter1
-    Magellan.logger.info("== before filter!! ==")
+    logger.info("== before filter!! ==")
   end
   def filter2
-    Magellan.logger.info("== after filter!! ==")
+    logger.info("== after filter!! ==")
   end
   private :filter1, :filter2
 end
