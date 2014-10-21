@@ -40,18 +40,7 @@ gem 'spring',        group: :development
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
-# インストールする方法で採用したい順位は以下のとおりですが、公開前は1はNGで、
-# dockerを使うとコンテナのイメージをビルドする際のユーザがSSHログインのユーザとは
-# 異なるので2もNGとなってしまいます。ですので仕方なく3の方法を選びます。
-#
-# 1. rubygemsから普通のgemとしてインストール
-# gem "magellan-rails"
-#
-# 2. :git, :branchオプションを使用してインストール
-# gem "magellan-rails", :git => 'git@github.com:tengine/magellan-rails.git', :branch => "features/start_magellan-rails"
-#
-# 3. submoduleで取得した上で :pathオプションを使用してインストール
-gem "magellan-rails" , :path => "gems/magellan-rails"
+gem "magellan-rails"
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.0.0'
