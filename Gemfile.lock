@@ -1,11 +1,3 @@
-PATH
-  remote: gems/magellan-rails
-  specs:
-    magellan-rails (0.0.1)
-      bunny
-      json
-      railties (~> 4.1.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -40,7 +32,7 @@ GEM
     brocket (0.0.3)
       thor
     builder (3.2.2)
-    bunny (1.4.0)
+    bunny (1.5.0)
       amq-protocol (>= 1.9.2)
     coffee-rails (4.0.1)
       coffee-script (>= 2.2.0)
@@ -62,6 +54,10 @@ GEM
       thor (>= 0.14, < 2.0)
     json (1.8.1)
     libv8 (3.16.14.3)
+    magellan-rails (0.0.1)
+      bunny
+      json
+      railties (~> 4.1.0)
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
@@ -153,7 +149,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.0)
   jbuilder (~> 2.0)
   jquery-rails
-  magellan-rails!
+  magellan-rails
   newrelic_rpm
   rails (~> 4.1.0)
   rspec-rails (~> 3.0.0)
