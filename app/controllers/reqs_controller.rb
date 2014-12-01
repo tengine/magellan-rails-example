@@ -1,3 +1,5 @@
+require 'base64'
+
 class ReqsController < ApplicationController
 
   respond_to :json
@@ -33,6 +35,11 @@ class ReqsController < ApplicationController
   def show_data
     r = request
     body = r.body.read
+    begin
+      {body: body}.to_json
+    rescue Encoding::UndefinedConversionError
+      body = Base64.strict_encode64(body)
+    end
     dat = {
       method: r.request_method,
       path: r.path_info,
