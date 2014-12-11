@@ -41,6 +41,7 @@ gem 'spring',        group: :development
 # gem 'debugger', group: [:development, :test]
 
 gem "magellan-rails"
+gem "magellan-publisher"
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.0.0'
