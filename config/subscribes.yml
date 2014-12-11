@@ -1,1 +1,2 @@
 hello/#: "hello#index"
+worker/pub: "worker#pub"
