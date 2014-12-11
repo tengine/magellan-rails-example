@@ -29,4 +29,16 @@ describe "BooksSubscriber", :type => :request do
       expect(Book.first.title).to eq 'sample book ver2'
     end
   end
+
+  describe "PUBLISH /books/delete" do
+    before do
+      Book.new({title: 'sample book1'}).save
+      Book.new({title: 'sample book2'}).save
+    end
+
+    it "works! (now write some real specs)" do
+      publish "books/delete", ''
+      expect(Book.count).to eq 0
+    end
+  end
 end
