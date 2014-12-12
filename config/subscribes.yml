@@ -1,2 +1,5 @@
 hello/#: "hello#index"
+worker/books:          'books#create'
+worker/books/+/update: 'books#update'
+worker/books/delete:   'books#delete_all'
 worker/pub: "worker#pub"
