@@ -12,7 +12,7 @@ end
 describe "BooksSubscriber", :type => :request do
   describe "PUBLISH /books" do
     it "works! (now write some real specs)" do
-      publish "books", {"title" => "sample book"}.to_json
+      publish "/books", {"title" => "sample book"}.to_json
       expect(Book.count).to eq 1
       expect(Book.first.title).to eq 'sample book'
     end
@@ -24,7 +24,7 @@ describe "BooksSubscriber", :type => :request do
     end
 
     it "works! (now write some real specs)" do
-      publish "books/1/update", {"title" => "sample book ver2"}.to_json
+      publish "/books/1/update", {"title" => "sample book ver2"}.to_json
       expect(Book.count).to eq 1
       expect(Book.first.title).to eq 'sample book ver2'
     end
@@ -37,7 +37,7 @@ describe "BooksSubscriber", :type => :request do
     end
 
     it "works! (now write some real specs)" do
-      publish "books/delete", ''
+      publish "/books/delete", ''
       expect(Book.count).to eq 0
     end
   end

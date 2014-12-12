@@ -1,5 +1,5 @@
 hello/#: "hello#index"
 
-books:   "books#create"
-books/+/update: 'books#update'
-books/delete:   'books#delete_all'
+/books:          "books#create"
+/books/+/update: 'books#update'
+/books/delete:   'books#delete_all'
