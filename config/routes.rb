@@ -9,8 +9,8 @@ Rails.application.routes.draw do
   get 'hello/index', to: "healthcheck#hello"
   get 'hello/echo' , to: "healthcheck#echo"
 
-  get 'version'    , to: 'healthcheck#version'
-  get 'env'        , to: 'healthcheck#env'
+  get 'version'    , to: 'healthcheck#show_version'
+  get 'env'        , to: 'healthcheck#show_env'
 
   post 'mqtt/auth', to: 'mqtt#auth'
 

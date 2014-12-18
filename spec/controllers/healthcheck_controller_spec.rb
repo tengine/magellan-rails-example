@@ -18,14 +18,14 @@ RSpec.describe HealthcheckController, :type => :controller do
 
   describe "GET version" do
     it "returns http success" do
-      get :version
+      get :show_version
       expect(response).to be_success
     end
   end
 
   describe "GET env" do
     it "returns http success" do
-      get :env
+      get :show_env
       expect(response).to be_success
     end
   end
