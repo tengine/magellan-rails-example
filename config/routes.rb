@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
 
-  get 'env/index'
-
   resources :reqs
   resources :books
 
@@ -12,6 +10,7 @@ Rails.application.routes.draw do
   get 'hello/echo'
 
   get 'version', to: 'version#index'
+  get 'env', to: 'env#index'
 
   post 'mqtt/auth', to: 'mqtt#auth'
 
