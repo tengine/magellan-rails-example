@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'version/index'
+
   resources :reqs
   resources :books
 
