@@ -1,24 +1,16 @@
 Rails.application.routes.draw do
 
-  get 'healthcheck/hello'
-
-  get 'healthcheck/echo'
-
-  get 'healthcheck/version'
-
-  get 'healthcheck/env'
-
   resources :reqs
   resources :books
 
   post 'binary',      to: 'binary#post'
   post 'binary/info', to: 'binary#info'
 
-  get 'hello/index'
-  get 'hello/echo'
+  get 'hello/index', to: "healthcheck#hello"
+  get 'hello/echo' , to: "healthcheck#echo"
 
-  get 'version', to: 'version#index'
-  get 'env', to: 'env#index'
+  get 'version'    , to: 'healthcheck#version'
+  get 'env'        , to: 'healthcheck#env'
 
   post 'mqtt/auth', to: 'mqtt#auth'
 
