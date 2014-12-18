@@ -6,10 +6,12 @@ Rails.application.routes.draw do
   post 'binary',      to: 'binary#post'
   post 'binary/info', to: 'binary#info'
 
-  get 'hello/index'
-  get 'hello/echo'
+  get 'hello/index', to: "healthcheck#hello"
+  get 'hello/echo' , to: "healthcheck#echo"
 
-  get 'version', to: 'version#index'
+  get 'version'    , to: 'healthcheck#show_version'
+  get 'env'        , to: 'healthcheck#show_env'
+  get 'sleep'      , to: 'healthcheck#get_sleep'
 
   post 'mqtt/auth', to: 'mqtt#auth'
 
