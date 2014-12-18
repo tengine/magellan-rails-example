@@ -1,5 +1,13 @@
 Rails.application.routes.draw do
 
+  get 'healthcheck/hello'
+
+  get 'healthcheck/echo'
+
+  get 'healthcheck/version'
+
+  get 'healthcheck/env'
+
   resources :reqs
   resources :books
 
