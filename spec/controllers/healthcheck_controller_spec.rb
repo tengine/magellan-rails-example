@@ -39,6 +39,17 @@ RSpec.describe HealthcheckController, :type => :controller do
     it "returns http success" do
       get :show_env
       expect(response).to be_success
+      json = JSON.parse(response.body)
+      expect(json).to eq(ENV.to_hash)
+    end
+  end
+
+  describe "GET sleep" do
+    it "returns http success" do
+      get :get_sleep, t: 2
+      expect(response).to be_success
+      json = JSON.parse(response.body)
+      expect(json).to eq({"sleep" => 2})
     end
   end
 

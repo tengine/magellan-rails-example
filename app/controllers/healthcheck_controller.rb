@@ -16,4 +16,10 @@ class HealthcheckController < ApplicationController
     # sort by key
     render json: ENV.keys.sort.each_with_object({}){|k,d| d[k] = ENV[k]}
   end
+
+  def get_sleep
+    t = (params[:t] || 1).to_i.seconds
+    sleep(t)
+    render json: {sleep: t}
+  end
 end

@@ -11,6 +11,7 @@ Rails.application.routes.draw do
 
   get 'version'    , to: 'healthcheck#show_version'
   get 'env'        , to: 'healthcheck#show_env'
+  get 'sleep'      , to: 'healthcheck#get_sleep'
 
   post 'mqtt/auth', to: 'mqtt#auth'
 
