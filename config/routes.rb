@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  get 'env/index'
+
   resources :reqs
   resources :books
 
