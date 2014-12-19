@@ -57,16 +57,14 @@ GEM
     magellan-publisher (0.0.2)
       bunny
       json
-    magellan-rails (0.0.3)
-      activesupport
+    magellan-rails (0.0.4)
       bunny
       json
-      magellan-publisher
       railties (~> 4.1.0)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
     mime-types (2.4.3)
-    minitest (5.4.3)
+    minitest (5.5.0)
     multi_json (1.10.1)
     mysql2 (0.3.17)
     newrelic_rpm (3.9.8.273)
