@@ -13,7 +13,9 @@ Rails.application.routes.draw do
   get 'env'        , to: 'healthcheck#show_env'
   get 'sleep'      , to: 'healthcheck#get_sleep'
 
-  post 'mqtt/auth', to: 'mqtt#auth'
+  post 'mqtt/auth',  to: 'mqtt#auth'
+  post 'mqtt/auth2', to: 'mqtt#auth2'
+  post 'mqtt/auth3', to: 'mqtt#auth3'
 
 
 
