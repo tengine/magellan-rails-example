@@ -80,7 +80,7 @@ GEM
     magellan-publisher (0.0.2)
       bunny
       json
-    magellan-rails (0.1.2)
+    magellan-rails (0.1.3)
       bunny
       json
       railties (~> 4.1)
