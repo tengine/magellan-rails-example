@@ -1,5 +1,6 @@
 class HealthcheckController < ApplicationController
   def hello
+    logger.info('HealthcheckController#hello')
     render json: {hello: 'world' }
   end
 
