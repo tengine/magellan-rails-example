@@ -80,7 +80,7 @@ GEM
     magellan-publisher (0.0.2)
       bunny
       json
-    magellan-rails (0.1.4)
+    magellan-rails (0.1.5)
       bunny
       json
       railties (~> 4.1)
@@ -193,7 +193,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   magellan-publisher
-  magellan-rails
+  magellan-rails (~> 0.1.5)
   mysql2
   newrelic_rpm
   rails (~> 4.2.0)
