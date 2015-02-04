@@ -10,7 +10,7 @@ RSpec.describe BinaryController, :type => :request do
   describe "POST: /binary" do
     it "return binary response" do
       req_body = "\xff"
-      post "/binary", req_body, { "CONTENT_TYPE" => "application/octet-stream" }
+      post "/binary", req_body, { "content-type" => "application/octet-stream" }
       expect(response).to be_success
       expect(response).to have_http_status(200)
 
@@ -21,7 +21,7 @@ RSpec.describe BinaryController, :type => :request do
   describe "POST: /binary/info" do
     it "return binary info response" do
       req_body = "\xff"
-      post "/binary/info", req_body, { "CONTENT_TYPE" => "application/octet-stream" }
+      post "/binary/info", req_body, { "content-type" => "application/octet-stream" }
       expect(response).to be_success
       expect(response).to have_http_status(200)
 
