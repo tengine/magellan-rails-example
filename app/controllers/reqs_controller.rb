@@ -39,11 +39,14 @@ class ReqsController < ApplicationController
       {body: body}.to_json
     rescue Encoding::UndefinedConversionError
       body = Base64.strict_encode64(body)
+    rescue JSON::GeneratorError
+      body = Base64.strict_encode64(body)
     end
     dat = {
       method: r.request_method,
       path: r.path_info,
       query: r.query_string,
+      headers: r.headers.each_with_object([]){|(k,v), arr| arr << [k, v] if k =~ /^HTTP_/ },
       body: body,
       params: params
     }
