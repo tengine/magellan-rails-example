@@ -43,7 +43,7 @@ GEM
     brocket (0.0.3)
       thor
     builder (3.2.2)
-    bunny (1.6.3)
+    bunny (1.7.0)
       amq-protocol (>= 1.9.2)
     byebug (3.5.1)
       columnize (~> 0.8)
@@ -77,7 +77,7 @@ GEM
     libv8 (3.16.14.7)
     loofah (2.0.1)
       nokogiri (>= 1.5.9)
-    magellan-publisher (0.0.2)
+    magellan-publisher (0.0.3)
       bunny
       json
     magellan-rails (0.2.3)
