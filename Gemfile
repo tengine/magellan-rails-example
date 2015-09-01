@@ -49,9 +49,6 @@ group :development, :test do
   gem 'spring'
 end
 
-gem "magellan-rails", "~> 0.2.3"
-gem "magellan-publisher"
-
 group :development, :test do
   gem 'rspec-rails', '~> 3.0.0'
   gem "brocket"
