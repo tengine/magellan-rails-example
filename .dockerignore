@@ -5,5 +5,3 @@ vendor/bundle
 log/*.log
 tmp
 coverage
-
-public/assets

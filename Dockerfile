@@ -19,7 +19,6 @@ ADD Gemfile /usr/src/app/Gemfile
 ADD Gemfile.lock /usr/src/app/Gemfile.lock
 RUN bundle install --system --without development test && rm /usr/local/lib/ruby/gems/2.2.0/cache/*.gem && rm /usr/local/bundle/cache/*.gem
 ADD . /usr/src/app
-RUN bundle exec rake assets:precompile
 
 ADD magellan-proxy /usr/src/app/magellan-proxy
 
