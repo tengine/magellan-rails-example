@@ -20,6 +20,6 @@ ADD Gemfile.lock /usr/src/app/Gemfile.lock
 RUN bundle install --system --without development test && rm /usr/local/lib/ruby/gems/2.2.0/cache/*.gem && rm /usr/local/bundle/cache/*.gem
 ADD . /usr/src/app
 
-ADD magellan-proxy /usr/src/app/magellan-proxy
+ADD https://github.com/groovenauts/magellan-proxy/releases/download/v0.0.1/magellan-proxy_linux-amd64 /usr/src/app/magellan-proxy
 
 CMD ["/usr/src/app/magellan-proxy", "-n", "5", "-p", "3000", "bundle", "exec", "puma", "-t", "5:5", "-p", "3000", "-e", "production"]
