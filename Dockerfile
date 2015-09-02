@@ -23,4 +23,4 @@ RUN bundle exec rake assets:precompile
 
 ADD magellan-proxy /usr/src/app/magellan-proxy
 
-CMD ["/usr/src/app/magellan-proxy", "bundle", "exec", "rails", "server", "--port", "80"]
+CMD ["/usr/src/app/magellan-proxy", "-n", "5", "-p", "3000", "bundle", "exec", "puma", "-t", "5:5", "-p", "3000", "-e", "production"]

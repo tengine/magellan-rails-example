@@ -55,6 +55,7 @@ group :development, :test do
 end
 
 gem "rails_12factor", group: :production
+gem "puma", group: :production
 
 # Use newrelic_rpm as the New Relic agent
 gem 'newrelic_rpm'
