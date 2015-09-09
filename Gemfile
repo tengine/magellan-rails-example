@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 source 'https://rubygems.org'
 
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 4.2.0'
 # Use mysql as the database for Active Record
@@ -49,7 +48,8 @@ group :development, :test do
   gem 'spring'
 end
 
-gem "magellan-rails", "~> 0.2.3"
+gem "magellan-rails", "~> 0.2.4", source: "file://#{File.expand_path("../repo", __FILE__)}"
+
 gem "magellan-publisher"
 
 group :development, :test do

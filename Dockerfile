@@ -17,7 +17,9 @@ VOLUME /usr/src/app/log
 
 ADD Gemfile /usr/src/app/Gemfile
 ADD Gemfile.lock /usr/src/app/Gemfile.lock
-RUN bundle install --system --without development test && rm /usr/local/lib/ruby/gems/2.2.0/cache/*.gem && rm /usr/local/bundle/cache/*.gem
 ADD . /usr/src/app
+RUN gem install builder
+RUN cd /usr/src/app/repo && gem generate_index
+RUN bundle install --system --without development test && rm /usr/local/lib/ruby/gems/2.2.0/cache/*.gem && rm /usr/local/bundle/cache/*.gem
 
 CMD ["bundle", "exec", "magellan-rails"]

@@ -1,5 +1,6 @@
 GEM
   remote: https://rubygems.org/
+  remote: file:/Users/chikanaga/work/magellan-rails-example/repo/
   specs:
     actionmailer (4.2.0)
       actionpack (= 4.2.0)
@@ -80,7 +81,7 @@ GEM
     magellan-publisher (0.0.3)
       bunny
       json
-    magellan-rails (0.2.3)
+    magellan-rails (0.2.4)
       bunny
       json
       msgpack (~> 0.5.4)
@@ -90,7 +91,7 @@ GEM
     mime-types (2.4.3)
     mini_portile (0.6.2)
     minitest (5.5.1)
-    msgpack (0.5.11)
+    msgpack (0.5.12)
     multi_json (1.10.1)
     mysql2 (0.3.17)
     newrelic_rpm (3.9.8.273)
@@ -200,7 +201,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   magellan-publisher
-  magellan-rails (~> 0.2.3)
+  magellan-rails (~> 0.2.4)!
   mysql2
   newrelic_rpm
   rails (~> 4.2.0)
@@ -216,4 +217,4 @@ DEPENDENCIES
   web-console (~> 2.0)
 
 BUNDLED WITH
-   1.10.5
+   1.10.6
