@@ -49,7 +49,7 @@ group :development, :test do
   gem 'spring'
 end
 
-gem "magellan-rails", "~> 0.2.3"
+gem "magellan-rails", "~> 0.2.4"
 gem "magellan-publisher"
 
 group :development, :test do
